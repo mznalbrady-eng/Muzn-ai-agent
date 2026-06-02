@@ -1,19 +1,29 @@
 import streamlit as st
 from groq import Groq
 
-st.title("🤖 وكيل مزن الذكي")
+# عنوان الوكيل
+st.title("وكيل مزن الذكي 🤖")
+
+# تصميم الألوان للحواف
+st.markdown("""
+    <style>
+    div[data-baseweb="input"] {
+        border-color: #007BFF !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # نظام كلمة السر
-password = st.sidebar.text_input("كلمة السر:", type="password")
+password = st.sidebar.text_input("كلمة السر", type="password")
 if password != "Muzn2026":
-    st.warning("أدخلي كلمة السر للبدء")
+    st.warning("أدخلي كلمة السر للبدء.")
     st.stop()
 
-# إعداد الوكيل
-# ضعي مفتاحك الخاص هنا بين علامتي التنصيص
-api_key = "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" 
+# إعداد الوكيل باستخدام الخزنة الآمنة
+api_key = st.secrets["GROQ_API_KEY"]
 client = Groq(api_key=api_key)
 
+# واجهة البحث
 user_input = st.text_area("ماذا تريدين من الوكيل أن يبحث عنه؟")
 if st.button("ابحثي واكتبي"):
     if user_input:
