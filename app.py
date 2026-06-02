@@ -7,8 +7,9 @@ st.title("وكيل مزن الذكي 🤖")
 # تصميم الألوان للحواف
 st.markdown("""
     <style>
-    div[data-baseweb="input"] {
-        border-color: #007BFF !important;
+    .stTextArea textarea {
+        border: 2px solid #007BFF !important;
+        border-radius: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
