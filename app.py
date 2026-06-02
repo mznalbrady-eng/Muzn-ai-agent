@@ -7,11 +7,18 @@ st.title("وكيل مزن الذكي 🤖")
 # تصميم الألوان للحواف
 st.markdown("""
     <style>
-    .stTextArea textarea {
+    /* تغيير لون إطار جميع خانات الإدخال إلى الأزرق */
+    .stTextInput input, .stTextArea textarea {
         border: 2px solid #007BFF !important;
-        border-radius: 10px;
+        border-radius: 10px !important;
+    }
+    /* تغيير لون التركيز عند النقر */
+    .stTextInput input:focus, .stTextArea textarea:focus {
+        border-color: #007BFF !important;
+        box-shadow: 0 0 5px #007BFF !important;
     }
     </style>
+""", unsafe_allow_html=True)
 """, unsafe_allow_html=True)
 
 # نظام كلمة السر
