@@ -1,35 +1,38 @@
 import streamlit as st
-from groq import Groq
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
+import json
 
-# عنوان الوكيل
-st.title("وكيل مزن الذكي 🤖")
+# إعداد الربط مع جوجل درايف
+def get_drive_service():
+    creds_info = st.secrets["connections"]["gcloud"]["gcp_service_account_info"]
+    creds_dict = json.loads(creds_info)
+    creds = service_account.Credentials.from_service_account_info(creds_dict, 
+            scopes=["https://www.googleapis.com/auth/drive.readonly"])
+    return build("drive", "v3", credentials=creds)
 
-# تصميم الألوان للحواف
-st.markdown("""
-    <style>
-    .stTextInput input, .stTextArea textarea {
-        border: 2px solid #007BFF !important;
-        border-radius: 10px !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
+st.title("🤖 وكيل مزن الذكي")
+st.write("أنا جاهز لقراءة ملفاتك والبحث فيها!")
 
-# نظام كلمة السر
-password = st.sidebar.text_input("كلمة السر", type="password")
-if password != "Muzn2026":
-    st.warning("أدخلي كلمة السر للبدء.")
-    st.stop()
+query = st.text_input("وش تبين تبحثين عنه في ملفاتك؟")
 
-# إعداد الوكيل باستخدام الخزنة الآمنة
-client = Groq(api_key="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")
-
-# واجهة البحث
-user_input = st.text_area("ماذا تريدين من الوكيل أن يبحث عنه؟")
-if st.button("ابحثي واكتبي"):
-    if user_input:
-        with st.spinner('جاري البحث والترتيب...'):
-            response = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": user_input}]
-            )
-            st.write(response.choices[0].message.content)
+if st.button("ابحثي لي"):
+    if query:
+        with st.spinner("جاري البحث في ملفاتك..."):
+            try:
+                service = get_drive_service()
+                # البحث عن الملفات
+                results = service.files().list(q=f"name contains '{query}' and trashed=false", 
+                                             fields="files(id, name)").execute()
+                files = results.get("files", [])
+                
+                if files:
+                    st.write("لقيت لكِ هذه الملفات:")
+                    for file in files:
+                        st.write(f"- {file['name']}")
+                else:
+                    st.write("للأسف ما لقيت ملف بهذا الاسم.")
+            except Exception as e:
+                st.error(f"حدث خطأ أثناء الاتصال: {e}")
+    else:
+        st.warning("الرجاء كتابة اسم الملف للبحث عنه.")
