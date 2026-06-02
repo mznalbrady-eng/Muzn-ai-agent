@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 
 # عنوان الوكيل
-st.title("وكيل مُزن الذكي 🤖")
+st.title("وكيل مزن الذكي 🤖")
 
 # تصميم الألوان للحواف
 st.markdown("""
