@@ -21,8 +21,7 @@ if password != "Muzn2026":
     st.stop()
 
 # إعداد الوكيل باستخدام الخزنة الآمنة
-api_key = st.secrets["GROQ_API_KEY"]
-client = Groq(api_key=api_key)
+client = Groq(api_key="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")
 
 # واجهة البحث
 user_input = st.text_area("ماذا تريدين من الوكيل أن يبحث عنه؟")
